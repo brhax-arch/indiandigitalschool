@@ -41,17 +41,30 @@
         .marks-table th, .marks-table td, .fee-table th, .fee-table td { border:1px solid #e2e8f0; padding:0.5rem; text-align:center; }
         .progress-bar { width:100%; height:6px; background:#e2e8f0; border-radius:4px; margin-top:8px; }
         .progress-fill { height:100%; background:#f59e0b; border-radius:4px; transition:width 0.6s ease; }
-        /* Updated homework grid styles */
-        .homework-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:1.5rem; margin-top:1rem; }
-        .homework-card { background:white; border-radius:1rem; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.08); transition:0.3s; }
+        .homework-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(250px,1fr)); gap:1.5rem; margin-top:1rem; }
+        .homework-card { background:white; border-radius:1rem; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.08); transition:0.3s; cursor:pointer; }
         .homework-card:hover { transform:translateY(-5px); box-shadow:0 8px 20px rgba(0,0,0,0.12); }
         .homework-card img { width:100%; height:200px; object-fit:cover; }
         .homework-card .caption { padding:0.75rem; text-align:center; background:#f8fafc; font-size:0.8rem; color:#475569; }
-        .notice-card { background:white; border-radius:1rem; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.05); margin-bottom:1rem; }
+        .homework-card .date { font-size:0.7rem; color:#94a3b8; text-align:center; padding-bottom:0.5rem; }
+        .notice-card { background:white; border-radius:1rem; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.05); margin-bottom:1rem; cursor:pointer; transition:0.2s; }
+        .notice-card:hover { transform:translateY(-2px); box-shadow:0 8px 16px rgba(0,0,0,0.1); }
         .notice-card img { width:100%; max-height:250px; object-fit:cover; }
         .notice-content { padding:1rem; }
         .filter-btn { padding:0.5rem 1rem; border-radius:2rem; background:#e2e8f0; font-size:0.8rem; cursor:pointer; transition:0.2s; border:none; }
         .filter-btn.active { background:#f59e0b; color:white; }
+
+        /* ===== ITEM MODAL (for homework & notices) ===== */
+        .item-modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.85); display:none; align-items:center; justify-content:center; z-index:2000; padding:1rem; }
+        .item-modal-overlay.active { display:flex; }
+        .item-modal-content { background:white; border-radius:1.5rem; max-width:900px; width:100%; max-height:90vh; overflow-y:auto; position:relative; }
+        .item-modal-close { position:sticky; top:0; float:right; margin:0.5rem; background:rgba(0,0,0,0.6); color:white; border:none; width:40px; height:40px; border-radius:50%; font-size:1.5rem; cursor:pointer; z-index:10; transition:0.2s; }
+        .item-modal-close:hover { background:#f59e0b; }
+        .item-modal-image { width:100%; max-height:500px; object-fit:contain; background:#1a1a2e; }
+        .item-modal-body { padding:1.5rem; }
+        .item-modal-title { font-size:1.25rem; font-weight:700; margin-bottom:0.5rem; }
+        .item-modal-meta { font-size:0.8rem; color:#64748b; margin-bottom:0.75rem; }
+        .item-modal-description { font-size:0.95rem; line-height:1.6; color:#1e293b; white-space:pre-wrap; }
     </style>
 </head>
 <body>
@@ -88,7 +101,7 @@
     </div>
 
     <div class="max-w-7xl mx-auto px-3 py-4">
-        <!-- About Page -->
+        <!-- ===== ABOUT PAGE ===== -->
         <div id="aboutPage" class="page">
             <div class="bg-white rounded-2xl p-4 md:p-8 shadow-sm">
                 <h2 class="section-title">🏛️ About Us</h2>
@@ -98,12 +111,23 @@
             </div>
         </div>
 
-        <!-- Vision Page -->
+        <!-- ===== VISION PAGE ===== -->
         <div id="visionPage" class="page hidden-page">
-            <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm"><h2 class="section-title">🌟 Our Vision</h2><p>To create a dynamic learning environment that nurtures knowledge, creativity, confidence, and strong values, empowering students to become responsible global citizens and future leaders.</p><h2 class="section-title mt-6">🎯 Our Mission</h2><ul class="list-disc pl-5 space-y-2"><li>To provide quality education through modern teaching methods and digital learning.</li><li>To encourage critical thinking, creativity, and innovation among students.</li><li>To build strong moral values, discipline, and leadership qualities.</li><li>To ensure the overall development of every child academically, socially, emotionally, and physically.</li><li>To prepare students with the skills and confidence needed for future success.</li></ul></div>
+            <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm">
+                <h2 class="section-title">🌟 Our Vision</h2>
+                <p>To create a dynamic learning environment that nurtures knowledge, creativity, confidence, and strong values, empowering students to become responsible global citizens and future leaders.</p>
+                <h2 class="section-title mt-6">🎯 Our Mission</h2>
+                <ul class="list-disc pl-5 space-y-2">
+                    <li>To provide quality education through modern teaching methods and digital learning.</li>
+                    <li>To encourage critical thinking, creativity, and innovation among students.</li>
+                    <li>To build strong moral values, discipline, and leadership qualities.</li>
+                    <li>To ensure the overall development of every child academically, socially, emotionally, and physically.</li>
+                    <li>To prepare students with the skills and confidence needed for future success.</li>
+                </ul>
+            </div>
         </div>
 
-        <!-- Messages Page -->
+        <!-- ===== MESSAGES PAGE ===== -->
         <div id="messagePage" class="page hidden-page">
             <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm">
                 <div class="bg-gray-50 rounded-xl p-6 border-l-4 border-amber-500 mb-6">
@@ -121,32 +145,86 @@
             </div>
         </div>
 
-        <!-- Programs Page -->
+        <!-- ===== PROGRAMS PAGE ===== -->
         <div id="programsPage" class="page hidden-page">
-            <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm"><h2 class="section-title">🧘 Our Signature Program</h2><div class="max-w-md mx-auto bg-gray-50 rounded-xl overflow-hidden shadow"><img src="https://i.postimg.cc/YS3ckVQV/NQDL0412-1.jpg" class="w-full h-64 object-cover"><div class="p-4 text-center"><h3 class="font-bold text-xl">🧘 Yoga & Wellness</h3><p>Physical & mental wellness. Daily morning sessions 7:30-8:15am.</p></div></div></div>
+            <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm">
+                <h2 class="section-title">🧘 Our Signature Program</h2>
+                <div class="max-w-md mx-auto bg-gray-50 rounded-xl overflow-hidden shadow">
+                    <img src="https://i.postimg.cc/YS3ckVQV/NQDL0412-1.jpg" class="w-full h-64 object-cover">
+                    <div class="p-4 text-center">
+                        <h3 class="font-bold text-xl">🧘 Yoga & Wellness</h3>
+                        <p>Physical & mental wellness. Daily morning sessions 7:30-8:15am.</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <!-- Admissions Open Page -->
+        <!-- ===== ADMISSIONS OPEN PAGE ===== -->
         <div id="admissionsOpenPage" class="page hidden-page">
-            <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm"><h2 class="section-title">📋 Admissions Open</h2><p>Admissions are now open for the academic year 2025-26. Limited seats available.</p><h3 class="text-xl font-bold mt-4">✨ Why Choose Indian Digital School?</h3><div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2"><div class="bg-gray-50 p-2 rounded flex items-center gap-2"><i class="fas fa-check-circle text-amber-500"></i> Smart Digital Classrooms</div><div class="bg-gray-50 p-2 rounded flex items-center gap-2"><i class="fas fa-check-circle text-amber-500"></i> Experienced and Dedicated Teachers</div><div class="bg-gray-50 p-2 rounded flex items-center gap-2"><i class="fas fa-check-circle text-amber-500"></i> Activity-Based Learning</div><div class="bg-gray-50 p-2 rounded flex items-center gap-2"><i class="fas fa-check-circle text-amber-500"></i> Strong Academic Foundation</div><div class="bg-gray-50 p-2 rounded flex items-center gap-2"><i class="fas fa-check-circle text-amber-500"></i> Communication & Personality Development</div><div class="bg-gray-50 p-2 rounded flex items-center gap-2"><i class="fas fa-check-circle text-amber-500"></i> Individual Attention for Every Student</div><div class="bg-gray-50 p-2 rounded flex items-center gap-2"><i class="fas fa-check-circle text-amber-500"></i> Focus on Discipline and Moral Values</div><div class="bg-gray-50 p-2 rounded flex items-center gap-2"><i class="fas fa-check-circle text-amber-500"></i> Sports, Arts, and Co-Curricular Activities</div><div class="bg-gray-50 p-2 rounded flex items-center gap-2"><i class="fas fa-check-circle text-amber-500"></i> Safe and Student-Friendly Campus</div></div><div class="mt-6 p-3 bg-amber-50 rounded-xl text-center"><p class="font-semibold">Join Indian Digital School and give your child the gift of quality education.</p></div></div>
+            <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm">
+                <h2 class="section-title">📋 Admissions Open</h2>
+                <p>Admissions are now open for the academic year 2025-26. Limited seats available.</p>
+                <h3 class="text-xl font-bold mt-4">✨ Why Choose Indian Digital School?</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
+                    <div class="bg-gray-50 p-2 rounded flex items-center gap-2"><i class="fas fa-check-circle text-amber-500"></i> Smart Digital Classrooms</div>
+                    <div class="bg-gray-50 p-2 rounded flex items-center gap-2"><i class="fas fa-check-circle text-amber-500"></i> Experienced and Dedicated Teachers</div>
+                    <div class="bg-gray-50 p-2 rounded flex items-center gap-2"><i class="fas fa-check-circle text-amber-500"></i> Activity-Based Learning</div>
+                    <div class="bg-gray-50 p-2 rounded flex items-center gap-2"><i class="fas fa-check-circle text-amber-500"></i> Strong Academic Foundation</div>
+                    <div class="bg-gray-50 p-2 rounded flex items-center gap-2"><i class="fas fa-check-circle text-amber-500"></i> Communication & Personality Development</div>
+                    <div class="bg-gray-50 p-2 rounded flex items-center gap-2"><i class="fas fa-check-circle text-amber-500"></i> Individual Attention for Every Student</div>
+                    <div class="bg-gray-50 p-2 rounded flex items-center gap-2"><i class="fas fa-check-circle text-amber-500"></i> Focus on Discipline and Moral Values</div>
+                    <div class="bg-gray-50 p-2 rounded flex items-center gap-2"><i class="fas fa-check-circle text-amber-500"></i> Sports, Arts, and Co-Curricular Activities</div>
+                    <div class="bg-gray-50 p-2 rounded flex items-center gap-2"><i class="fas fa-check-circle text-amber-500"></i> Safe and Student-Friendly Campus</div>
+                </div>
+                <div class="mt-6 p-3 bg-amber-50 rounded-xl text-center"><p class="font-semibold">Join Indian Digital School and give your child the gift of quality education.</p></div>
+            </div>
         </div>
 
-        <!-- Admission Enquiry Form -->
+        <!-- ===== ADMISSION ENQUIRY FORM ===== -->
         <div id="admissionPage" class="page hidden-page">
-            <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm"><h2 class="section-title">📝 Admission Enquiry</h2><div class="grid grid-cols-1 sm:grid-cols-2 gap-3"><input type="text" id="enquiryName" placeholder="Student Name *" class="border p-2 rounded"><input type="email" id="enquiryEmail" placeholder="Parent Email *" class="border p-2 rounded"><input type="tel" id="enquiryPhone" placeholder="Phone *" class="border p-2 rounded"><select id="enquiryGrade" class="border p-2 rounded"><option>Nursery</option><option>LKG</option><option>UKG</option><option>1st</option><option>2nd</option><option>3rd</option><option>4th</option><option>5th</option><option>6th</option><option>7th</option><option>8th</option><option>9th</option><option>10th</option></select><textarea id="enquiryMsg" rows="2" placeholder="Additional Message (optional)" class="col-span-1 sm:col-span-2 border p-2 rounded"></textarea></div><button id="submitEnquiry" class="mt-3 bg-blue-800 text-white px-6 py-2 rounded-full">Submit Enquiry</button><div id="enquiryResponse" class="mt-2"></div></div>
+            <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm">
+                <h2 class="section-title">📝 Admission Enquiry</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <input type="text" id="enquiryName" placeholder="Student Name *" class="border p-2 rounded">
+                    <input type="email" id="enquiryEmail" placeholder="Parent Email *" class="border p-2 rounded">
+                    <input type="tel" id="enquiryPhone" placeholder="Phone *" class="border p-2 rounded">
+                    <select id="enquiryGrade" class="border p-2 rounded">
+                        <option>Nursery</option><option>LKG</option><option>UKG</option>
+                        <option>1st</option><option>2nd</option><option>3rd</option><option>4th</option><option>5th</option>
+                        <option>6th</option><option>7th</option><option>8th</option><option>9th</option><option>10th</option>
+                    </select>
+                    <textarea id="enquiryMsg" rows="2" placeholder="Additional Message (optional)" class="col-span-1 sm:col-span-2 border p-2 rounded"></textarea>
+                </div>
+                <button id="submitEnquiry" class="mt-3 bg-blue-800 text-white px-6 py-2 rounded-full">Submit Enquiry</button>
+                <div id="enquiryResponse" class="mt-2"></div>
+            </div>
         </div>
 
-        <!-- Marks Page -->
+        <!-- ===== MARKS PAGE ===== -->
         <div id="marksPage" class="page hidden-page">
-            <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm"><h2 class="section-title">📊 Check Your Results</h2><div class="flex flex-col sm:flex-row gap-3"><input type="text" id="rollNumber" placeholder="Roll Number (e.g., IDS0001)" class="flex-1 border p-2 rounded"><button id="fetchMarksBtn" class="bg-blue-800 text-white px-5 py-2 rounded-full">View Marks</button></div><div id="marksResult" class="mt-4"></div></div>
+            <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm">
+                <h2 class="section-title">📊 Check Your Results</h2>
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <input type="text" id="rollNumber" placeholder="Roll Number (e.g., IDS0001)" class="flex-1 border p-2 rounded">
+                    <button id="fetchMarksBtn" class="bg-blue-800 text-white px-5 py-2 rounded-full">View Marks</button>
+                </div>
+                <div id="marksResult" class="mt-4"></div>
+            </div>
         </div>
 
-        <!-- Fee Page -->
+        <!-- ===== FEE PAGE ===== -->
         <div id="feePage" class="page hidden-page">
-            <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm"><h2 class="section-title">💰 Fee Status</h2><div class="flex flex-col sm:flex-row gap-3"><input type="text" id="feeRollNumber" placeholder="Enter Roll Number" class="flex-1 border p-2 rounded"><button id="fetchFeeBtn" class="bg-blue-800 text-white px-5 py-2 rounded-full">Check Fee</button></div><div id="feeResult" class="mt-4"></div></div>
+            <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm">
+                <h2 class="section-title">💰 Fee Status</h2>
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <input type="text" id="feeRollNumber" placeholder="Enter Roll Number" class="flex-1 border p-2 rounded">
+                    <button id="fetchFeeBtn" class="bg-blue-800 text-white px-5 py-2 rounded-full">Check Fee</button>
+                </div>
+                <div id="feeResult" class="mt-4"></div>
+            </div>
         </div>
 
-        <!-- Homework Page (updated to show images) -->
+        <!-- ===== HOMEWORK PAGE (Images) ===== -->
         <div id="homeworkPage" class="page hidden-page">
             <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm">
                 <h2 class="section-title">📚 Homework Assignments</h2>
@@ -155,34 +233,72 @@
             </div>
         </div>
 
-        <!-- Notice Board -->
+        <!-- ===== NOTICE BOARD ===== -->
         <div id="noticePage" class="page hidden-page">
-            <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm"><h2 class="section-title">📢 Notice Board</h2><div id="noticesList"></div></div>
+            <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm">
+                <h2 class="section-title">📢 Notice Board</h2>
+                <div id="noticesList"></div>
+            </div>
         </div>
 
-        <!-- YouTube -->
+        <!-- ===== YOUTUBE PAGE ===== -->
         <div id="youtubePage" class="page hidden-page">
-            <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm text-center"><h2 class="section-title">📺 Our YouTube Channel</h2><a href="https://youtube.com/@indiandigitalschoolpanjavemav" target="_blank" class="inline-flex items-center gap-2 bg-red-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-red-700"><i class="fab fa-youtube text-xl"></i> Subscribe</a><p class="text-gray-500 mt-3">Watch school events, celebrations, student activities, and more!</p></div>
+            <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm text-center">
+                <h2 class="section-title">📺 Our YouTube Channel</h2>
+                <a href="https://youtube.com/@indiandigitalschoolpanjavemav" target="_blank" class="inline-flex items-center gap-2 bg-red-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-red-700">
+                    <i class="fab fa-youtube text-xl"></i> Subscribe
+                </a>
+                <p class="text-gray-500 mt-3">Watch school events, celebrations, student activities, and more!</p>
+            </div>
         </div>
 
-        <!-- News -->
+        <!-- ===== NEWS PAGE ===== -->
         <div id="newsPage" class="page hidden-page">
-            <div class="bg-amber-50 rounded-2xl p-6 md:p-8 shadow-sm border-l-4 border-amber-500"><h2 class="section-title">📢 Important News</h2><div id="newsContent"></div></div>
+            <div class="bg-amber-50 rounded-2xl p-6 md:p-8 shadow-sm border-l-4 border-amber-500">
+                <h2 class="section-title">📢 Important News</h2>
+                <div id="newsContent"></div>
+            </div>
         </div>
     </div>
 
-    <footer>technology solution provided by BRHAX software solutions pvt.ltd<br>© 2025 Indian Digital School — Panjavemavaram, West Godavari Dist., AP<br>Admissions Open Nursery to 10th | Excellence in Education</footer>
+    <footer>
+        technology solution provided by BRHAX software solutions pvt.ltd<br>
+        © 2025 Indian Digital School — Panjavemavaram, West Godavari Dist., AP<br>
+        Admissions Open Nursery to 10th | Excellence in Education
+    </footer>
 
-    <!-- Gallery Modal -->
+    <!-- ===== GALLERY MODAL ===== -->
     <div id="galleryModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header"><h3 id="modalTitle" class="text-xl font-bold">Gallery</h3><button id="closeModal" class="text-2xl hover:text-amber-500">&times;</button></div>
-            <div class="gallery-slider"><img id="modalImage" src="" class="w-full max-h-[400px] object-contain bg-gray-900"><button id="modalPrev" class="slider-nav slider-prev">◀</button><button id="modalNext" class="slider-nav slider-next">▶</button><div id="modalCounter" class="image-counter"></div></div>
+            <div class="modal-header">
+                <h3 id="modalTitle" class="text-xl font-bold">Gallery</h3>
+                <button id="closeModal" class="text-2xl hover:text-amber-500">&times;</button>
+            </div>
+            <div class="gallery-slider">
+                <img id="modalImage" src="" class="w-full max-h-[400px] object-contain bg-gray-900">
+                <button id="modalPrev" class="slider-nav slider-prev">◀</button>
+                <button id="modalNext" class="slider-nav slider-next">▶</button>
+                <div id="modalCounter" class="image-counter"></div>
+            </div>
             <div class="modal-info"><p id="modalInfo" class="text-gray-700"></p></div>
         </div>
     </div>
 
+    <!-- ===== ITEM MODAL (for homework & notices) ===== -->
+    <div id="itemModal" class="item-modal-overlay" onclick="closeItemModal(event)">
+        <div class="item-modal-content" onclick="event.stopPropagation();">
+            <button class="item-modal-close" onclick="closeItemModal()">✕</button>
+            <img id="itemModalImage" src="" alt="Preview" class="item-modal-image">
+            <div class="item-modal-body">
+                <div id="itemModalTitle" class="item-modal-title"></div>
+                <div id="itemModalMeta" class="item-modal-meta"></div>
+                <div id="itemModalDescription" class="item-modal-description"></div>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // ========== FIREBASE CONFIG ==========
         const firebaseConfig = {
             apiKey: "AIzaSyCjAW4M5ei8pf8EWtkL08UIqeGP1TSid6o",
             authDomain: "indiandigitalschool-67f19.firebaseapp.com",
@@ -194,58 +310,131 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // ========== GALLERY (unchanged) ==========
+        // ========== GALLERY ==========
         let currentSection = null, currentIndex = 0;
+
         async function loadGallery() {
             const container = document.getElementById('galleryGrid');
             const snapshot = await db.collection('gallery_sections').orderBy('createdAt', 'desc').get();
-            if (snapshot.empty) { container.innerHTML = '<div class="text-center text-gray-500 py-8">No gallery sections yet.</div>'; return; }
+            if (snapshot.empty) {
+                container.innerHTML = '<div class="text-center text-gray-500 py-8">No gallery sections yet.</div>';
+                return;
+            }
             container.innerHTML = '';
             snapshot.forEach(doc => {
                 const section = doc.data();
                 const images = section.images || [];
                 const firstImage = images[0] || '';
-                const card = document.createElement('div'); card.className = 'photo-card';
+                const card = document.createElement('div');
+                card.className = 'photo-card';
                 card.innerHTML = `<img src="${firstImage}" alt="${section.title}"><div class="caption">${section.title}</div>`;
                 card.onclick = () => openModal(section);
                 container.appendChild(card);
             });
         }
-        function openModal(section) { if(!section) return; currentSection=section; currentIndex=0; renderModal(); document.getElementById('galleryModal').classList.add('active'); }
-        function renderModal() {
-            if(!currentSection) return;
-            const images = currentSection.images || [];
-            document.getElementById('modalTitle').innerText = currentSection.title;
-            document.getElementById('modalImage').src = images[currentIndex] || '';
-            document.getElementById('modalCounter').innerText = images.length ? `${currentIndex+1}/${images.length}` : '0/0';
-            document.getElementById('modalInfo').innerText = currentSection.info || '';
-            const prev = document.getElementById('modalPrev'), next = document.getElementById('modalNext');
-            if(images.length<=1) { prev.style.display='none'; next.style.display='none'; } else { prev.style.display='block'; next.style.display='block'; }
-        }
-        function prevImage() { if(currentSection && currentSection.images?.length>1){ currentIndex = (currentIndex-1+currentSection.images.length)%currentSection.images.length; renderModal(); } }
-        function nextImage() { if(currentSection && currentSection.images?.length>1){ currentIndex = (currentIndex+1)%currentSection.images.length; renderModal(); } }
-        function closeModal() { document.getElementById('galleryModal').classList.remove('active'); currentSection=null; }
-        document.getElementById('modalPrev').onclick = prevImage; document.getElementById('modalNext').onclick = nextImage; document.getElementById('closeModal').onclick = closeModal;
-        document.getElementById('galleryModal').onclick = (e) => { if(e.target === document.getElementById('galleryModal')) closeModal(); };
 
-        // ========== MARKS (unchanged) ==========
+        function openModal(section) {
+            if (!section) return;
+            currentSection = section;
+            currentIndex = 0;
+            renderModal();
+            document.getElementById('galleryModal').classList.add('active');
+        }
+
+        function renderModal() {
+            if (!currentSection) return;
+            const images = currentSection.images || [];
+            document.getElementById('modalTitle').innerText = currentSection.title || 'Gallery';
+            document.getElementById('modalImage').src = images[currentIndex] || '';
+            document.getElementById('modalCounter').innerText = images.length ? `${currentIndex+1} / ${images.length}` : '0 / 0';
+            document.getElementById('modalInfo').innerText = currentSection.info || 'No description available.';
+            const prev = document.getElementById('modalPrev'), next = document.getElementById('modalNext');
+            if (images.length <= 1) { prev.style.display = 'none'; next.style.display = 'none'; }
+            else { prev.style.display = 'block'; next.style.display = 'block'; }
+        }
+
+        function prevImage() {
+            if (!currentSection) return;
+            const images = currentSection.images || [];
+            if (images.length > 1) {
+                currentIndex = (currentIndex - 1 + images.length) % images.length;
+                renderModal();
+            }
+        }
+
+        function nextImage() {
+            if (!currentSection) return;
+            const images = currentSection.images || [];
+            if (images.length > 1) {
+                currentIndex = (currentIndex + 1) % images.length;
+                renderModal();
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('galleryModal').classList.remove('active');
+            currentSection = null;
+        }
+        document.getElementById('modalPrev').onclick = prevImage;
+        document.getElementById('modalNext').onclick = nextImage;
+        document.getElementById('closeModal').onclick = closeModal;
+        document.getElementById('galleryModal').onclick = (e) => { if (e.target === document.getElementById('galleryModal')) closeModal(); };
+
+        // ========== ITEM MODAL (for homework & notices) ==========
+        function openItemModal(imageUrl, title, meta, description) {
+            document.getElementById('itemModalImage').src = imageUrl || 'https://via.placeholder.com/400x300?text=No+Image';
+            document.getElementById('itemModalTitle').innerText = title;
+            document.getElementById('itemModalMeta').innerHTML = meta;
+            document.getElementById('itemModalDescription').innerHTML = description;
+            document.getElementById('itemModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeItemModal(e) {
+            if (e && e.target !== e.currentTarget) return;
+            document.getElementById('itemModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeItemModal(); });
+
+        // ========== MARKS ==========
         let publishStatus = false;
-        db.collection('settings').doc('publish').onSnapshot(doc => { publishStatus = doc.exists ? doc.data().published : false; });
-        const FA_EXAMS = ["FA-1","FA-2","FA-3","FA-4"], SA_EXAMS = ["SA-1 (MOY)","SA-2 (EOY)"];
+        db.collection('settings').doc('publish').onSnapshot(doc => {
+            publishStatus = doc.exists ? doc.data().published : false;
+        });
+
+        const FA_EXAMS = ["FA-1","FA-2","FA-3","FA-4"];
+        const SA_EXAMS = ["SA-1 (MOY)","SA-2 (EOY)"];
         const PRIMARY_SUBJECTS = ["Telugu","Hindi","Literacy","Numeracy","General Awareness","Rhymes/Story Telling"];
         const HIGHER_SUBJECTS = ["Telugu","Hindi","ELGA","Maths","EVS/Science","Activity/Social","CSR"];
-        const FA_UNITS = {"FA-1":["Unit 1","Unit 2"],"FA-2":["Unit 3","Unit 4"],"FA-3":["Unit 5","Unit 6"],"FA-4":["Unit 7","Unit 8"]};
-        function isPrePrimary(c) { return c === "Nursery" || c === "K 1 - LKG" || c === "K 2 - UKG"; }
-        function getGrade(p) { if(p>=90) return 'A+'; if(p>=75) return 'A'; if(p>=60) return 'B'; if(p>=45) return 'C'; if(p>=35) return 'D'; return 'F'; }
+        const FA_UNITS = {
+            "FA-1": ["Unit 1","Unit 2"],
+            "FA-2": ["Unit 3","Unit 4"],
+            "FA-3": ["Unit 5","Unit 6"],
+            "FA-4": ["Unit 7","Unit 8"]
+        };
+
+        function isPrePrimary(c) {
+            return c === "Nursery" || c === "K 1 - LKG" || c === "K 2 - UKG";
+        }
+        function getGrade(p) {
+            if (p >= 90) return 'A+';
+            if (p >= 75) return 'A';
+            if (p >= 60) return 'B';
+            if (p >= 45) return 'C';
+            if (p >= 35) return 'D';
+            return 'F';
+        }
+
         document.getElementById('fetchMarksBtn').onclick = async () => {
             const roll = document.getElementById('rollNumber').value.trim().toUpperCase();
             const cont = document.getElementById('marksResult');
-            if(!roll) { cont.innerHTML = '<div class="bg-red-100 p-2 rounded">Enter roll number</div>'; return; }
-            if(!publishStatus) { cont.innerHTML = '<div class="bg-red-100 p-2 rounded">Results not published yet.</div>'; return; }
+            if (!roll) { cont.innerHTML = '<div class="bg-red-100 p-2 rounded">Enter roll number</div>'; return; }
+            if (!publishStatus) { cont.innerHTML = '<div class="bg-red-100 p-2 rounded">Results not published yet.</div>'; return; }
             cont.innerHTML = '<div class="text-center text-gray-500 py-4">Loading...</div>';
             try {
                 const doc = await db.collection('students').doc(roll).get();
-                if(!doc.exists) { cont.innerHTML = '<div class="bg-red-100 p-2 rounded">Roll number not found.</div>'; return; }
+                if (!doc.exists) { cont.innerHTML = '<div class="bg-red-100 p-2 rounded">Roll number not found.</div>'; return; }
                 const student = doc.data();
                 const subjects = isPrePrimary(student.className) ? PRIMARY_SUBJECTS : HIGHER_SUBJECTS;
                 let html = `<div class="bg-blue-50 p-2 rounded mb-2"><strong>${student.name}</strong> | ${student.className} | ${roll}</div><select id="examSelect" class="w-full border p-2 rounded mb-2">${[...FA_EXAMS, ...SA_EXAMS].map(e=>`<option>${e}</option>`).join('')}</select><div id="marksDisplay"></div>`;
@@ -253,55 +442,79 @@
                 const examSelect = document.getElementById('examSelect');
                 const displayArea = document.getElementById('marksDisplay');
                 const render = () => {
-                    const exam = examSelect.value, data = student[exam] || {}, isFA = FA_EXAMS.includes(exam), pre = isPrePrimary(student.className);
-                    let total=0, maxTotal=0, table='<div class="overflow-x-auto"><table class="marks-table"><thead><tr>';
-                    if(isFA && !pre && FA_UNITS[exam]) { table += '<th>Subject</th><th>Unit 1</th><th>Unit 2</th><th>Total</th></thead><tbody>';
-                        for(let sub of subjects) {
-                            const units = FA_UNITS[exam];
-                            const m1 = data[units[0]]?.[sub] || 0, m2 = data[units[1]]?.[sub] || 0, st = m1+m2;
+                    const exam = examSelect.value;
+                    const data = student[exam] || {};
+                    const isFA = FA_EXAMS.includes(exam);
+                    const pre = isPrePrimary(student.className);
+                    let total = 0, maxTotal = 0;
+                    let table = '<div class="overflow-x-auto"><table class="marks-table"><thead><tr>';
+                    if (isFA && !pre && FA_UNITS[exam]) {
+                        const units = FA_UNITS[exam];
+                        table += '<th>Subject</th><th>Unit 1</th><th>Unit 2</th><th>Total</th></thead><tbody>';
+                        for (let sub of subjects) {
+                            const m1 = data[units[0]]?.[sub] || 0;
+                            const m2 = data[units[1]]?.[sub] || 0;
+                            const st = m1 + m2;
                             total += st; maxTotal += 100;
-                            table += `<tr><td>${sub}</td><td>${m1}</td><td>${m2}</td><td class="font-semibold">${st}</td></td>`;
+                            table += `<tr><td>${sub}</td><td>${m1}</td><td>${m2}</td><td class="font-semibold">${st}</td></tr>`;
                         }
                     } else {
                         table += '<th>Subject</th><th>Marks</th></thead><tbody>';
-                        for(let sub of subjects) {
-                            const mark = data[sub] || 0, maxM = (isFA && pre) ? 50 : 100;
+                        for (let sub of subjects) {
+                            const mark = data[sub] || 0;
+                            const maxM = (isFA && pre) ? 50 : 100;
                             total += mark; maxTotal += maxM;
                             table += `<tr><td>${sub}</td><td>${mark} / ${maxM}</td></tr>`;
                         }
                     }
-                    const percent = maxTotal ? (total/maxTotal)*100 : 0, grade = getGrade(percent);
+                    const percent = maxTotal ? (total / maxTotal) * 100 : 0;
+                    const grade = getGrade(percent);
                     table += `</tbody></table></div><div class="mt-3 p-2 bg-gray-50 rounded">Total: ${total}/${maxTotal} | ${percent.toFixed(1)}% | Grade: ${grade}<div class="progress-bar"><div class="progress-fill" style="width:${percent}%"></div></div></div>`;
                     displayArea.innerHTML = table;
                 };
-                examSelect.onchange = render; render();
-            } catch(e) { cont.innerHTML = '<div class="bg-red-100 p-2 rounded">Error loading results.</div>'; }
+                examSelect.onchange = render;
+                render();
+            } catch (e) {
+                cont.innerHTML = '<div class="bg-red-100 p-2 rounded">Error loading results.</div>';
+            }
         };
 
-        // ========== FEE (unchanged) ==========
+        // ========== FEE ==========
         document.getElementById('fetchFeeBtn').onclick = async () => {
             const roll = document.getElementById('feeRollNumber').value.trim().toUpperCase();
             const cont = document.getElementById('feeResult');
-            if(!roll) { cont.innerHTML = '<div class="bg-red-100 p-2 rounded">Enter roll number</div>'; return; }
+            if (!roll) { cont.innerHTML = '<div class="bg-red-100 p-2 rounded">Enter roll number</div>'; return; }
             cont.innerHTML = '<div class="text-center text-gray-500 py-4">Loading...</div>';
             try {
                 const doc = await db.collection('students').doc(roll).get();
-                if(!doc.exists) { cont.innerHTML = '<div class="bg-red-100 p-2 rounded">Roll number not found.</div>'; return; }
+                if (!doc.exists) { cont.innerHTML = '<div class="bg-red-100 p-2 rounded">Roll number not found.</div>'; return; }
                 const s = doc.data();
-                const total = s.feeTotal || 0, paid = s.feePaid || 0, due = total - paid, dueDate = s.feeDueDate ? new Date(s.feeDueDate).toLocaleDateString() : 'Not set';
+                const total = s.feeTotal || 0, paid = s.feePaid || 0, due = total - paid;
+                const dueDate = s.feeDueDate ? new Date(s.feeDueDate).toLocaleDateString() : 'Not set';
                 let statusText = due <= 0 ? 'Paid in Full' : (paid > 0 ? 'Partial Payment' : 'Pending');
                 let statusClass = due <= 0 ? 'bg-green-100 text-green-700' : (paid > 0 ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700');
-                cont.innerHTML = `<div class="border rounded-xl p-3"><div class="flex justify-between"><h3 class="font-bold">${s.name}</h3><span class="${statusClass} px-2 py-0.5 rounded">${statusText}</span></div><div class="grid grid-cols-2 gap-2 text-sm mt-2"><div>Total Fee:</div><div>₹${total.toLocaleString()}</div><div>Amount Paid:</div><div>₹${paid.toLocaleString()}</div><div>Due Amount:</div><div class="font-bold ${due>0?'text-red-600':'text-green-600'}">₹${due.toLocaleString()}</div><div>Due Date:</div><div>${dueDate}</div></div>${due>0?'<div class="mt-2 text-xs text-red-500"><i class="fas fa-exclamation-triangle"></i> Please clear dues.</div>':'<div class="mt-2 text-xs text-green-500"><i class="fas fa-check-circle"></i> Fee record is clear.</div>'}</div>`;
-            } catch(e) { cont.innerHTML = '<div class="bg-red-100 p-2 rounded">Error loading fee details.</div>'; }
+                cont.innerHTML = `<div class="border rounded-xl p-3">
+                    <div class="flex justify-between"><h3 class="font-bold">${s.name}</h3><span class="${statusClass} px-2 py-0.5 rounded">${statusText}</span></div>
+                    <div class="grid grid-cols-2 gap-2 text-sm mt-2">
+                        <div>Total Fee:</div><div>₹${total.toLocaleString()}</div>
+                        <div>Amount Paid:</div><div>₹${paid.toLocaleString()}</div>
+                        <div>Due Amount:</div><div class="font-bold ${due>0?'text-red-600':'text-green-600'}">₹${due.toLocaleString()}</div>
+                        <div>Due Date:</div><div>${dueDate}</div>
+                    </div>
+                    ${due > 0 ? '<div class="mt-2 text-xs text-red-500"><i class="fas fa-exclamation-triangle"></i> Please clear dues.</div>' : '<div class="mt-2 text-xs text-green-500"><i class="fas fa-check-circle"></i> Fee record is clear.</div>'}
+                </div>`;
+            } catch (e) {
+                cont.innerHTML = '<div class="bg-red-100 p-2 rounded">Error loading fee details.</div>';
+            }
         };
 
-        // ========== HOMEWORK (UPDATED: image grid with class filter) ==========
+        // ========== HOMEWORK (Images) ==========
         const classList = ["Nursery","K 1 - LKG","K 2 - UKG","Class 1","Class 2","Class 3","Class 4","Class 5","Class 6","Class 7","Class 8","Class 9","Class 10"];
         let currentHomeworkClass = null;
 
         function renderHomeworkClassButtons() {
             const container = document.getElementById('homeworkClassFilterButtons');
-            if(!container) return;
+            if (!container) return;
             container.innerHTML = `<button class="filter-btn ${!currentHomeworkClass ? 'active' : ''}" data-class="">All Classes</button>`;
             classList.forEach(cls => {
                 const btn = document.createElement('button');
@@ -315,79 +528,138 @@
                 container.appendChild(btn);
             });
             const allBtn = container.querySelector('[data-class=""]');
-            if(allBtn) allBtn.onclick = () => { currentHomeworkClass = null; renderHomeworkClassButtons(); loadHomeworkImages(); };
+            if (allBtn) allBtn.onclick = () => { currentHomeworkClass = null; renderHomeworkClassButtons(); loadHomeworkImages(); };
         }
 
         async function loadHomeworkImages() {
             const container = document.getElementById('homeworkListContainer');
-            if(!container) return;
+            if (!container) return;
             container.innerHTML = '<div class="text-center col-span-full py-8">Loading homework...</div>';
             let query = db.collection('homework').orderBy('createdAt', 'desc');
-            if(currentHomeworkClass) query = query.where('className', '==', currentHomeworkClass);
+            if (currentHomeworkClass) query = query.where('className', '==', currentHomeworkClass);
             const snapshot = await query.get();
-            if(snapshot.empty) { container.innerHTML = '<div class="text-center col-span-full py-8">No homework uploaded for this class.</div>'; return; }
+            if (snapshot.empty) {
+                container.innerHTML = '<div class="text-center col-span-full py-8">No homework uploaded for this class.</div>';
+                return;
+            }
             container.innerHTML = '';
             snapshot.forEach(doc => {
                 const hw = doc.data();
                 const card = document.createElement('div');
                 card.className = 'homework-card';
+                const dateStr = hw.createdAt ? new Date(hw.createdAt.toDate()).toLocaleDateString() : 'Recently';
                 card.innerHTML = `
                     <img src="${hw.imageUrl}" alt="Homework for ${hw.className}" onerror="this.style.display='none'">
                     <div class="caption">${hw.className} Homework</div>
-                    <div class="text-xs text-gray-400 text-center pb-2">Uploaded: ${hw.createdAt ? new Date(hw.createdAt.toDate()).toLocaleDateString() : 'Recently'}</div>
+                    <div class="date">📅 ${dateStr}</div>
                 `;
+                // Click to open modal
+                card.addEventListener('click', () => {
+                    const title = `📚 Homework: ${hw.className}`;
+                    const meta = `Uploaded: ${dateStr}`;
+                    const desc = `Click the image to zoom. This is homework for ${hw.className}.`;
+                    openItemModal(hw.imageUrl, title, meta, desc);
+                });
                 container.appendChild(card);
             });
         }
 
-        // ========== NOTICES (unchanged) ==========
+        // ========== NOTICES ==========
         async function loadNotices() {
             const cont = document.getElementById('noticesList');
-            const snap = await db.collection('notices').orderBy('timestamp','desc').get();
-            if(snap.empty) { cont.innerHTML = '<div class="text-center text-gray-500 py-4">No notices yet.</div>'; return; }
+            const snap = await db.collection('notices').orderBy('timestamp', 'desc').get();
+            if (snap.empty) {
+                cont.innerHTML = '<div class="text-center text-gray-500 py-4">No notices yet.</div>';
+                return;
+            }
             cont.innerHTML = '';
             snap.forEach(d => {
                 const n = d.data();
-                cont.innerHTML += `<div class="notice-card">${n.imageUrl ? `<img src="${n.imageUrl}" onerror="this.style.display='none'">` : ''}<div class="notice-content"><div class="font-bold text-lg">${n.title}</div><div class="text-xs text-gray-400 mb-1">${n.timestamp ? new Date(n.timestamp.toDate()).toLocaleString() : 'Recently'}</div><p class="text-sm">${n.content.replace(/\n/g,'<br>')}</p></div></div>`;
+                const card = document.createElement('div');
+                card.className = 'notice-card';
+                const dateStr = n.timestamp ? new Date(n.timestamp.toDate()).toLocaleString() : 'Recently';
+                card.innerHTML = `
+                    ${n.imageUrl ? `<img src="${n.imageUrl}" onerror="this.style.display='none'">` : ''}
+                    <div class="notice-content">
+                        <div class="font-bold text-lg">${n.title}</div>
+                        <div class="text-xs text-gray-400 mb-1">${dateStr}</div>
+                        <p class="text-sm">${n.content.replace(/\n/g, '<br>')}</p>
+                    </div>
+                `;
+                // Click to open modal
+                card.addEventListener('click', () => {
+                    const title = `📢 ${n.title}`;
+                    const meta = dateStr;
+                    const desc = n.content.replace(/\n/g, '<br>');
+                    const img = n.imageUrl || '';
+                    openItemModal(img, title, meta, desc);
+                });
+                cont.appendChild(card);
             });
         }
 
-        // ========== NEWS (unchanged) ==========
-        db.collection('news').doc('current').onSnapshot(doc => { document.getElementById('newsContent').innerHTML = doc.exists ? `<p>${doc.data().content}</p>` : '<p>No announcements.</p>'; });
+        // ========== NEWS ==========
+        db.collection('news').doc('current').onSnapshot(doc => {
+            document.getElementById('newsContent').innerHTML = doc.exists ? `<p>${doc.data().content}</p>` : '<p>No announcements.</p>';
+        });
 
-        // ========== ADMISSION ENQUIRY (unchanged) ==========
+        // ========== ADMISSION ENQUIRY ==========
         document.getElementById('submitEnquiry').onclick = async () => {
             const name = document.getElementById('enquiryName').value.trim();
             const email = document.getElementById('enquiryEmail').value.trim();
             const phone = document.getElementById('enquiryPhone').value.trim();
             const grade = document.getElementById('enquiryGrade').value;
             const msg = document.getElementById('enquiryMsg').value.trim();
-            if(!name || !email || !phone) { document.getElementById('enquiryResponse').innerHTML = '<div class="bg-red-100 p-2 rounded">Fill all required fields.</div>'; return; }
-            await db.collection('admissions').add({ studentName: name, parentEmail: email, phone, grade, message: msg, timestamp: firebase.firestore.FieldValue.serverTimestamp(), status: 'pending' });
+            if (!name || !email || !phone) {
+                document.getElementById('enquiryResponse').innerHTML = '<div class="bg-red-100 p-2 rounded">Fill all required fields.</div>';
+                return;
+            }
+            await db.collection('admissions').add({
+                studentName: name,
+                parentEmail: email,
+                phone,
+                grade,
+                message: msg,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                status: 'pending'
+            });
             document.getElementById('enquiryResponse').innerHTML = '<div class="bg-green-100 p-2 rounded">✅ Enquiry submitted! We will contact you.</div>';
-            document.getElementById('enquiryName').value = ''; document.getElementById('enquiryEmail').value = ''; document.getElementById('enquiryPhone').value = ''; document.getElementById('enquiryMsg').value = '';
+            document.getElementById('enquiryName').value = '';
+            document.getElementById('enquiryEmail').value = '';
+            document.getElementById('enquiryPhone').value = '';
+            document.getElementById('enquiryMsg').value = '';
             setTimeout(() => document.getElementById('enquiryResponse').innerHTML = '', 3000);
         };
 
-        // ========== PAGE NAVIGATION (unchanged) ==========
+        // ========== PAGE NAVIGATION ==========
         const pages = {
-            about: document.getElementById('aboutPage'), vision: document.getElementById('visionPage'), message: document.getElementById('messagePage'),
-            programs: document.getElementById('programsPage'), admissionsOpen: document.getElementById('admissionsOpenPage'),
-            admission: document.getElementById('admissionPage'), marks: document.getElementById('marksPage'), fee: document.getElementById('feePage'),
-            homework: document.getElementById('homeworkPage'), notice: document.getElementById('noticePage'), youtube: document.getElementById('youtubePage'), news: document.getElementById('newsPage')
+            about: document.getElementById('aboutPage'),
+            vision: document.getElementById('visionPage'),
+            message: document.getElementById('messagePage'),
+            programs: document.getElementById('programsPage'),
+            admissionsOpen: document.getElementById('admissionsOpenPage'),
+            admission: document.getElementById('admissionPage'),
+            marks: document.getElementById('marksPage'),
+            fee: document.getElementById('feePage'),
+            homework: document.getElementById('homeworkPage'),
+            notice: document.getElementById('noticePage'),
+            youtube: document.getElementById('youtubePage'),
+            news: document.getElementById('newsPage')
         };
         const navBtns = document.querySelectorAll('.nav-btn');
         const heroSection = document.getElementById('heroSection');
+
         function showPage(pageId) {
             Object.values(pages).forEach(p => p.classList.add('hidden-page'));
-            if(pages[pageId]) pages[pageId].classList.remove('hidden-page');
+            if (pages[pageId]) pages[pageId].classList.remove('hidden-page');
             navBtns.forEach(btn => btn.classList.remove('active'));
             const activeBtn = document.querySelector(`.nav-btn[data-page="${pageId}"]`);
-            if(activeBtn) activeBtn.classList.add('active');
+            if (activeBtn) activeBtn.classList.add('active');
             heroSection.style.display = pageId === 'about' ? 'block' : 'none';
-            if(pageId === 'homework') { renderHomeworkClassButtons(); loadHomeworkImages(); }
-            if(pageId === 'notice') loadNotices();
+            if (pageId === 'homework') { renderHomeworkClassButtons(); loadHomeworkImages(); }
+            if (pageId === 'notice') loadNotices();
         }
+
         navBtns.forEach(btn => btn.addEventListener('click', () => showPage(btn.dataset.page)));
         document.getElementById('admissionsOpenBtn').addEventListener('click', () => showPage('admissionsOpen'));
         showPage('about');
