@@ -30,8 +30,8 @@
         .modal-header .header-actions { display:flex; gap:0.5rem; align-items:center; }
         .modal-header .header-actions button { background:rgba(255,255,255,0.15); color:white; border:none; border-radius:50%; width:36px; height:36px; font-size:1.2rem; cursor:pointer; transition:0.2s; display:flex; align-items:center; justify-content:center; }
         .modal-header .header-actions button:hover { background:#f59e0b; }
-        .gallery-slider { position:relative; }
-        .gallery-slider img { width:100%; max-height:400px; object-fit:contain; background:#1a1a2e; }
+        .gallery-slider { position:relative; overflow:hidden; }
+        .gallery-slider img { width:100%; max-height:400px; object-fit:contain; background:#1a1a2e; display:block; }
         .slider-nav { position:absolute; top:50%; transform:translateY(-50%); background:rgba(0,0,0,0.5); color:white; border:none; padding:0.8rem 1rem; cursor:pointer; border-radius:50%; transition:0.2s; }
         .slider-nav:hover { background:#f59e0b; }
         .slider-prev { left:10px; }
@@ -68,39 +68,77 @@
         .item-modal-meta { font-size:0.8rem; color:#64748b; margin-bottom:0.75rem; }
         .item-modal-description { font-size:0.95rem; line-height:1.6; color:#1e293b; white-space:pre-wrap; }
 
-        /* ===== IMAGE ZOOM (only on images inside modals) ===== */
-        .modal-img-zoom {
-            cursor: zoom-in;
-            transition: transform 0.3s ease;
+        /* ===== ZOOM & PAN ===== */
+        .zoom-container {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+        .zoom-container img {
+            display: block;
             width: 100%;
             max-height: 400px;
             object-fit: contain;
             background: #1a1a2e;
+            transform-origin: 0 0;
+            transition: none;
+            cursor: grab;
+            touch-action: none;
+            user-select: none;
+            -webkit-user-select: none;
         }
-        .modal-img-zoom.zoomed {
-            transform: scale(2.5);
-            cursor: zoom-out;
+        .zoom-container img:active {
+            cursor: grabbing;
         }
-        .item-modal-img-zoom {
-            cursor: zoom-in;
-            transition: transform 0.3s ease;
-            width: 100%;
+        .zoom-container img.zoomed {
+            transform: scale(2.5) translate(0px, 0px);
+            cursor: grab;
+        }
+        .zoom-container img.zoomed:active {
+            cursor: grabbing;
+        }
+        .item-modal-content .zoom-container img {
             max-height: 500px;
-            object-fit: contain;
-            background: #1a1a2e;
         }
-        .item-modal-img-zoom.zoomed {
-            transform: scale(2.5);
-            cursor: zoom-out;
+        .gallery-slider .zoom-container {
+            height: 100%;
+            max-height: 400px;
         }
-        .gallery-slider { overflow: hidden; position: relative; }
-        .gallery-slider .modal-img-zoom { display: block; }
-        .item-modal-content .item-modal-img-zoom { display: block; }
-        .item-modal-header { background:linear-gradient(135deg,#0f2b3d,#1b4a6e); color:white; padding:1rem; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:10; }
-        .item-modal-header .item-header-title { font-size:1rem; font-weight:600; }
-        .item-modal-header .item-header-actions { display:flex; gap:0.5rem; align-items:center; }
-        .item-modal-header .item-header-actions button { background:rgba(255,255,255,0.15); color:white; border:none; border-radius:50%; width:36px; height:36px; font-size:1.2rem; cursor:pointer; transition:0.2s; display:flex; align-items:center; justify-content:center; }
-        .item-modal-header .item-header-actions button:hover { background:#f59e0b; }
+        .item-modal-content .zoom-container {
+            height: 100%;
+            max-height: 500px;
+        }
+
+        .item-modal-header {
+            background: linear-gradient(135deg, #0f2b3d, #1b4a6e);
+            color: white;
+            padding: 0.8rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .item-modal-header .item-header-title { font-size: 1rem; font-weight: 600; }
+        .item-modal-header .item-header-actions { display: flex; gap: 0.5rem; align-items: center; }
+        .item-modal-header .item-header-actions button {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .item-modal-header .item-header-actions button:hover { background: #f59e0b; }
     </style>
 </head>
 <body>
@@ -314,7 +352,9 @@
                 </div>
             </div>
             <div class="gallery-slider">
-                <img id="modalImage" src="" alt="Gallery image" class="modal-img-zoom">
+                <div class="zoom-container" id="galleryZoomContainer">
+                    <img id="modalImage" src="" alt="Gallery image" class="modal-img-zoom">
+                </div>
                 <button id="modalPrev" class="slider-nav slider-prev">◀</button>
                 <button id="modalNext" class="slider-nav slider-next">▶</button>
                 <div id="modalCounter" class="image-counter"></div>
@@ -333,7 +373,9 @@
                     <button class="item-modal-close" onclick="closeItemModal()">&times;</button>
                 </div>
             </div>
-            <img id="itemModalImage" src="" alt="Preview" class="item-modal-img-zoom">
+            <div class="zoom-container" id="itemZoomContainer">
+                <img id="itemModalImage" src="" alt="Preview" class="item-modal-img-zoom">
+            </div>
             <div class="item-modal-body">
                 <div id="itemModalMeta" class="item-modal-meta"></div>
                 <div id="itemModalDescription" class="item-modal-description"></div>
@@ -342,30 +384,226 @@
     </div>
 
     <script>
-        // ========== RESET ZOOM FUNCTION ==========
-        function resetZoom() {
-            document.getElementById('modalImage').classList.remove('zoomed');
-            document.getElementById('itemModalImage').classList.remove('zoomed');
-        }
+        // ========== ZOOM & PAN LOGIC ==========
+        (function() {
+            // Track zoom state for both containers
+            const zoomState = {
+                gallery: { zoomed: false, translateX: 0, translateY: 0 },
+                item: { zoomed: false, translateX: 0, translateY: 0 }
+            };
+            let activeContainer = null; // 'gallery' or 'item'
+            let dragData = { isDragging: false, startX: 0, startY: 0, originX: 0, originY: 0 };
 
-        // Attach reset buttons
-        document.getElementById('resetGalleryZoomBtn').addEventListener('click', resetZoom);
-        document.getElementById('resetItemZoomBtn').addEventListener('click', resetZoom);
+            function getContainer(type) {
+                return type === 'gallery' ? document.getElementById('galleryZoomContainer') : document.getElementById('itemZoomContainer');
+            }
 
-        // ========== IMAGE ZOOM TOGGLE ==========
-        function toggleZoom(e) {
-            e.target.classList.toggle('zoomed');
-        }
-        document.getElementById('modalImage').addEventListener('click', toggleZoom);
-        document.getElementById('itemModalImage').addEventListener('click', toggleZoom);
+            function getImage(type) {
+                return type === 'gallery' ? document.getElementById('modalImage') : document.getElementById('itemModalImage');
+            }
 
-        // Remove zoom when switching gallery images
-        function removeZoomFromGallery() {
-            document.getElementById('modalImage').classList.remove('zoomed');
-        }
-        function removeZoomFromItem() {
-            document.getElementById('itemModalImage').classList.remove('zoomed');
-        }
+            function applyTransform(type) {
+                const state = zoomState[type];
+                const img = getImage(type);
+                if (!img) return;
+                if (state.zoomed) {
+                    const scale = 2.5;
+                    const tx = state.translateX;
+                    const ty = state.translateY;
+                    img.style.transform = `scale(${scale}) translate(${tx}px, ${ty}px)`;
+                    img.style.transformOrigin = '0 0';
+                    img.classList.add('zoomed');
+                    img.style.cursor = 'grab';
+                } else {
+                    img.style.transform = '';
+                    img.style.transformOrigin = '';
+                    img.classList.remove('zoomed');
+                    img.style.cursor = 'zoom-in';
+                }
+            }
+
+            function toggleZoom(type, e) {
+                const state = zoomState[type];
+                if (state.zoomed) {
+                    // Zoom out – reset translation
+                    state.zoomed = false;
+                    state.translateX = 0;
+                    state.translateY = 0;
+                    applyTransform(type);
+                    activeContainer = null;
+                } else {
+                    // Zoom in – center the zoom on the click/tap point
+                    state.zoomed = true;
+                    state.translateX = 0;
+                    state.translateY = 0;
+                    // Calculate offset to zoom towards cursor/touch
+                    const img = getImage(type);
+                    const container = getContainer(type);
+                    const rect = img.getBoundingClientRect();
+                    // We'll keep the transform origin at 0,0 and adjust translate to center on the point
+                    // But for simplicity, we'll just zoom to center initially.
+                    // The user can drag later.
+                    applyTransform(type);
+                    activeContainer = type;
+                }
+            }
+
+            function resetZoom(type) {
+                const state = zoomState[type];
+                state.zoomed = false;
+                state.translateX = 0;
+                state.translateY = 0;
+                applyTransform(type);
+                if (activeContainer === type) activeContainer = null;
+            }
+
+            // Drag logic
+            function startDrag(type, clientX, clientY) {
+                const state = zoomState[type];
+                if (!state.zoomed) return;
+                dragData.isDragging = true;
+                dragData.startX = clientX;
+                dragData.startY = clientY;
+                dragData.originX = state.translateX;
+                dragData.originY = state.translateY;
+                const img = getImage(type);
+                img.style.cursor = 'grabbing';
+            }
+
+            function moveDrag(type, clientX, clientY) {
+                if (!dragData.isDragging) return;
+                const state = zoomState[type];
+                const dx = clientX - dragData.startX;
+                const dy = clientY - dragData.startY;
+                state.translateX = dragData.originX + dx;
+                state.translateY = dragData.originY + dy;
+                applyTransform(type);
+            }
+
+            function endDrag(type) {
+                if (dragData.isDragging) {
+                    dragData.isDragging = false;
+                    const img = getImage(type);
+                    if (img) img.style.cursor = 'grab';
+                }
+            }
+
+            // Attach events for gallery
+            const galleryContainer = document.getElementById('galleryZoomContainer');
+            const galleryImg = document.getElementById('modalImage');
+            galleryImg.addEventListener('click', function(e) {
+                toggleZoom('gallery', e);
+                e.stopPropagation();
+            });
+            galleryImg.addEventListener('mousedown', function(e) {
+                if (zoomState.gallery.zoomed) {
+                    startDrag('gallery', e.clientX, e.clientY);
+                    e.preventDefault();
+                }
+            });
+            document.addEventListener('mousemove', function(e) {
+                if (activeContainer === 'gallery') {
+                    moveDrag('gallery', e.clientX, e.clientY);
+                }
+            });
+            document.addEventListener('mouseup', function(e) {
+                if (activeContainer === 'gallery') {
+                    endDrag('gallery');
+                }
+            });
+            // Touch events for gallery
+            galleryImg.addEventListener('touchstart', function(e) {
+                if (zoomState.gallery.zoomed) {
+                    const touch = e.touches[0];
+                    startDrag('gallery', touch.clientX, touch.clientY);
+                    e.preventDefault();
+                }
+            }, { passive: false });
+            galleryImg.addEventListener('touchmove', function(e) {
+                if (activeContainer === 'gallery' && zoomState.gallery.zoomed) {
+                    const touch = e.touches[0];
+                    moveDrag('gallery', touch.clientX, touch.clientY);
+                    e.preventDefault();
+                }
+            }, { passive: false });
+            galleryImg.addEventListener('touchend', function(e) {
+                if (activeContainer === 'gallery') {
+                    endDrag('gallery');
+                }
+            });
+
+            // Attach events for item modal
+            const itemContainer = document.getElementById('itemZoomContainer');
+            const itemImg = document.getElementById('itemModalImage');
+            itemImg.addEventListener('click', function(e) {
+                toggleZoom('item', e);
+                e.stopPropagation();
+            });
+            itemImg.addEventListener('mousedown', function(e) {
+                if (zoomState.item.zoomed) {
+                    startDrag('item', e.clientX, e.clientY);
+                    e.preventDefault();
+                }
+            });
+            document.addEventListener('mousemove', function(e) {
+                if (activeContainer === 'item') {
+                    moveDrag('item', e.clientX, e.clientY);
+                }
+            });
+            document.addEventListener('mouseup', function(e) {
+                if (activeContainer === 'item') {
+                    endDrag('item');
+                }
+            });
+            itemImg.addEventListener('touchstart', function(e) {
+                if (zoomState.item.zoomed) {
+                    const touch = e.touches[0];
+                    startDrag('item', touch.clientX, touch.clientY);
+                    e.preventDefault();
+                }
+            }, { passive: false });
+            itemImg.addEventListener('touchmove', function(e) {
+                if (activeContainer === 'item' && zoomState.item.zoomed) {
+                    const touch = e.touches[0];
+                    moveDrag('item', touch.clientX, touch.clientY);
+                    e.preventDefault();
+                }
+            }, { passive: false });
+            itemImg.addEventListener('touchend', function(e) {
+                if (activeContainer === 'item') {
+                    endDrag('item');
+                }
+            });
+
+            // Reset buttons
+            document.getElementById('resetGalleryZoomBtn').addEventListener('click', function() {
+                resetZoom('gallery');
+            });
+            document.getElementById('resetItemZoomBtn').addEventListener('click', function() {
+                resetZoom('item');
+            });
+
+            // Reset when switching gallery images (called from main code)
+            window.resetGalleryZoom = function() { resetZoom('gallery'); };
+            window.resetItemZoom = function() { resetZoom('item'); };
+            // Also expose toggle for gallery image changes
+            window.forceResetGalleryZoom = function() {
+                const state = zoomState.gallery;
+                state.zoomed = false;
+                state.translateX = 0;
+                state.translateY = 0;
+                applyTransform('gallery');
+                if (activeContainer === 'gallery') activeContainer = null;
+            };
+            window.forceResetItemZoom = function() {
+                const state = zoomState.item;
+                state.zoomed = false;
+                state.translateX = 0;
+                state.translateY = 0;
+                applyTransform('item');
+                if (activeContainer === 'item') activeContainer = null;
+            };
+        })();
 
         // ========== FIREBASE CONFIG ==========
         const firebaseConfig = {
@@ -406,7 +644,8 @@
             if (!section) return;
             currentSection = section;
             currentIndex = 0;
-            removeZoomFromGallery();
+            // Reset zoom when opening new gallery
+            if (window.forceResetGalleryZoom) window.forceResetGalleryZoom();
             renderModal();
             document.getElementById('galleryModal').classList.add('active');
         }
@@ -428,7 +667,7 @@
             const images = currentSection.images || [];
             if (images.length > 1) {
                 currentIndex = (currentIndex - 1 + images.length) % images.length;
-                removeZoomFromGallery();
+                if (window.forceResetGalleryZoom) window.forceResetGalleryZoom();
                 renderModal();
             }
         }
@@ -438,7 +677,7 @@
             const images = currentSection.images || [];
             if (images.length > 1) {
                 currentIndex = (currentIndex + 1) % images.length;
-                removeZoomFromGallery();
+                if (window.forceResetGalleryZoom) window.forceResetGalleryZoom();
                 renderModal();
             }
         }
@@ -454,7 +693,7 @@
 
         // ========== ITEM MODAL ==========
         function openItemModal(imageUrl, title, meta, description) {
-            removeZoomFromItem();
+            if (window.forceResetItemZoom) window.forceResetItemZoom();
             document.getElementById('itemModalImage').src = imageUrl || 'https://via.placeholder.com/400x300?text=No+Image';
             document.getElementById('itemModalTitle').innerText = title;
             document.getElementById('itemModalMeta').innerHTML = meta;
